@@ -8,7 +8,7 @@ on:
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
-  deploy-to-splunk:
+  splunk-cicd-deployment:
     runs-on: ubuntu-latest 
     
     steps:
