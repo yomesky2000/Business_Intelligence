@@ -49,7 +49,7 @@ jobs:
 
   reload-splunk-deployment-server:
     runs-on: ubuntu-latest
-    needs: splunk-cicd-deployment  # This job runs after the first job completes
+    needs: deploy-to-splunk-enterprise  # This job runs after the first job completes
     steps:
     - name: Reload Deployment Server
       run: |
