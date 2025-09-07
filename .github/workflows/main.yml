@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy-to-splunk:
-    runs-on: self-hosted 
+    runs-on: ubuntu-latest #self-hosted 
     
     steps:
     - name: Checkout code
