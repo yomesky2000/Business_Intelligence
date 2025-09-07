@@ -1,0 +1,52 @@
+name: Splunk Deployment Pipeline
+
+on:
+  push:
+    branches: [ main ]  # Adjust branch as needed
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  deploy-to-splunk:
+    runs-on: self-hosted  # Using self-hosted runner to match your pool
+    # If you have specific labels for your runner, add them:
+    # runs-on: [self-hosted, SPLUNK-DEPLOYMENT-SERVER]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Copy Files to Staging Directory
+      run: |
+        mkdir -p ${{ github.workspace }}/staging
+        cp -r ${{ github.workspace }}/* ${{ github.workspace }}/staging/ || true
+      continue-on-error: true
+
+    - name: Create and Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: DEV_SPLUNK_DEPLOYMENT_SERVER
+        path: ${{ github.workspace }}/staging
+        retention-days: 30
+
+    - name: Copy ServerClass to DEV_SPLUNK_DEPLOYMENT_SERVER
+      run: |
+        sudo cp ${{ github.workspace }}/staging/serverclass.conf /opt/splunk/etc/system/local
+      continue-on-error: true
+
+    - name: Copy new splunk apps to DEV_SPLUNK_DEPLOYMENT_SERVER
+      run: |
+        sudo cp -r ${{ github.workspace }}/staging/deployment-apps/* /opt/splunk/etc/deployment-apps/
+      continue-on-error: true
+
+    - name: Change Ownership Of Splunk Directory
+      run: |
+        sudo chown -R splunk:splunk /opt/splunk/
+      continue-on-error: true
+
+    - name: Reload Deployment Server
+      run: |
+        sudo /opt/splunk/bin/splunk reload deploy-server -auth admin:password
+        # sudo /opt/splunk/bin/splunk restart
+      continue-on-error: true
