@@ -9,9 +9,7 @@ on:
 
 jobs:
   deploy-to-splunk:
-    runs-on: self-hosted  # Using self-hosted runner to match your pool
-    # If you have specific labels for your runner, add them:
-    # runs-on: [self-hosted, SPLUNK-DEPLOYMENT-SERVER]
+    runs-on: ubuntu-latest 
     
     steps:
     - name: Checkout code
