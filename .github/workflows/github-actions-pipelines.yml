@@ -44,7 +44,6 @@ jobs:
     - name: Reload Deployment Server
       run: |
         sudo /opt/splunk/bin/splunk reload deploy-server -auth admin:password
-        # sudo /opt/splunk/bin/splunk restart
       continue-on-error: true
 
   reload-splunk-deployment-server:
@@ -54,5 +53,4 @@ jobs:
     - name: Reload Deployment Server
       run: |
         sudo /opt/splunk/bin/splunk reload deploy-server -auth admin:password
-        # sudo /opt/splunk/bin/splunk restart
       continue-on-error: true
